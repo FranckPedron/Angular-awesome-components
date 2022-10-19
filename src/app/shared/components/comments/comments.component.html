@@ -15,6 +15,6 @@
                  (mouseleave)="onListItemMouseLeave(i)"
   >
     <span mat-line>{{ comment.comment }}</span>
-    <span mat-line>{{ comment.createdDate | date }}</span>
+    <span mat-line>{{ comment.createdDate | timeAgo }}</span>
   </mat-list-item>
 </mat-list>
