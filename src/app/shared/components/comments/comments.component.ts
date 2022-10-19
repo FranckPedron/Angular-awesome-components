@@ -1,13 +1,22 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormControl, Validators} from '@angular/forms';
 import {Comment} from "../../../core/models/comment.model";
-import {animate, state, style, transition, trigger} from "@angular/animations";
+import {animate, animateChild, group, query, stagger, state, style, transition, trigger} from "@angular/animations";
 
 @Component({
   selector: 'app-comments',
   templateUrl: './comments.component.html',
   styleUrls: ['./comments.component.scss'],
   animations: [
+    trigger('list',[
+      transition(':enter',[
+        query('@listItem', [
+          stagger(50,[
+            animateChild()
+          ])
+        ])
+      ])
+    ]),
     trigger('listItem', [
       state('default', style({
         transform: 'scale(1)',
@@ -27,6 +36,11 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
       ]),
       transition('void => *', [
         // ou ':enter'
+        query('.comment-text, .comment-date',[
+          style({
+            opacity: '0'
+          })
+        ]),
         style({
           transform: 'translateX( -100%)',
           opacity: 0,
@@ -36,7 +50,19 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
           transform: 'translateX(0)',
           opacity: 1,
           'background-color': 'white'
-        }))
+        })),
+        group([
+          query('.comment-text', [
+            animate('250ms', style({
+              opacity: 1,
+            }))
+          ]),
+          query('.comment-date', [
+            animate('500ms', style({
+              opacity: 1,
+            }))
+          ])
+        ])
       ])
     ])
   ]
