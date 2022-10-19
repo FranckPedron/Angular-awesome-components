@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {MaterialModule} from "../shared/material.module";
+
 import { ComplexFormComponent } from './components/complex-form/complex-form.component';
 import { SharedModule } from '../shared/shared.module';
+import {ComplexFormRoutingModule} from "./complex-form-routing.module";
+import {ComplexFormService} from "./services/complex-form.service";
 
 
 
@@ -12,8 +14,11 @@ import { SharedModule } from '../shared/shared.module';
   ],
   imports: [
     CommonModule,
-    MaterialModule,
+    ComplexFormRoutingModule,
     SharedModule
+  ],
+  providers: [
+    ComplexFormService
   ]
 })
 export class ComplexFormModule { }
