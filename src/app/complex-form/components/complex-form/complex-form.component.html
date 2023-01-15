@@ -5,10 +5,14 @@
     <div class="form-row">
       <mat-form-field appearance="fill">
         <mat-label>Prénom</mat-label>
-        <input type="text" matInput formControlName="firstname"></mat-form-field>
+        <input type="text" matInput formControlName="firstname">
+        <mat-error>Ce champs est requis</mat-error>
+      </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Nom</mat-label>
-        <input type="text" matInput formControlName="lastname"></mat-form-field>
+        <input type="text" matInput formControlName="lastname">
+        <mat-error>Ce champs est requis</mat-error>
+      </mat-form-field>
     </div>
   </mat-card>
   <mat-card class="form-card">
