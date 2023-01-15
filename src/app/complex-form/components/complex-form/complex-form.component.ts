@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {map, Observable, startWith, tap} from "rxjs";
 
 
@@ -30,7 +30,7 @@ export class ComplexFormComponent implements OnInit {
   ngOnInit(): void {
     this.initFormControls();
     this.initMainForm();
-    this.initFormObservables()
+    this.initFormObservables();
   }
 
   private initMainForm(): void {
@@ -101,6 +101,20 @@ export class ComplexFormComponent implements OnInit {
       this.phoneCtrl.clearValidators();
     }
     this.phoneCtrl.updateValueAndValidity();
+  }
+
+  getFormControlErrorText(ctrl: AbstractControl) {
+    if (ctrl.hasError('required')) {
+      return 'Ce champ est requis';
+    } else if (ctrl.hasError('email')) {
+      return 'Merci d\'entrer une adresse mail valide';
+    } else if (ctrl.hasError('minlength')) {
+      return 'Ce numéro de téléphone ne contient pas assez de chiffres';
+    } else if (ctrl.hasError('maxlength')) {
+      return 'Ce numéro de téléphone contient trop de chiffres';
+    } else {
+      return 'Ce champ contient une erreur';
+    }
   }
 
 }

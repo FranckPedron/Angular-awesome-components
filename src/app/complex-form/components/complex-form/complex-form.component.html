@@ -27,30 +27,42 @@
     <div class="form-row">
       <mat-form-field appearance="fill">
         <mat-label>Adresse mail</mat-label>
-        <input type="text" matInput formControlName="email"></mat-form-field>
+        <input type="text" matInput formControlName="email">
+        <mat-error>{{ getFormControlErrorText(emailCtrl) }}</mat-error>
+      </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Confirmez votre adresse mail</mat-label>
-        <input type="text" matInput formControlName="confirm"></mat-form-field>
+        <input type="text" matInput formControlName="confirm">
+        <mat-error>{{ getFormControlErrorText(confirmEmailCtrl) }}</mat-error>
+      </mat-form-field>
     </div>
   </mat-card>
   <mat-card class="form-card" *ngIf="showPhoneCtrl$ | async">
     <mat-card-subtitle>Téléphone</mat-card-subtitle>
     <mat-form-field appearance="fill">
       <mat-label>Numéro de téléphone</mat-label>
-      <input type="text" matInput [formControl]="phoneCtrl"></mat-form-field>
+      <input type="text" matInput [formControl]="phoneCtrl">
+      <mat-error>{{ getFormControlErrorText(phoneCtrl) }}</mat-error>
+    </mat-form-field>
   </mat-card>
   <mat-card class="form-card" [formGroup]="loginInfoForm">
     <mat-card-subtitle>Informations de connexion</mat-card-subtitle>
     <mat-form-field appearance="fill">
       <mat-label>Nom d'utilisateur</mat-label>
-      <input type="text" matInput formControlName="username"></mat-form-field>
+      <input type="text" matInput formControlName="username">
+      <mat-error>Ce champ est requis</mat-error>
+    </mat-form-field>
     <div class="form-row">
       <mat-form-field appearance="fill">
         <mat-label>Mot de passe</mat-label>
-        <input type="password" matInput formControlName="password"></mat-form-field>
+        <input type="password" matInput formControlName="password">
+        <mat-error>Ce champ est requis</mat-error>
+      </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Confirmez votre mot de passe</mat-label>
-        <input type="password" matInput formControlName="confirmPassword"></mat-form-field>
+        <input type="password" matInput formControlName="confirmPassword">
+        <mat-error>Ce champ est requis</mat-error>
+      </mat-form-field>
     </div>
   </mat-card>
   <mat-card-actions *ngIf="mainForm.valid">
