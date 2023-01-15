@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {map, Observable, startWith, tap} from "rxjs";
+import {ComplexFormService} from "../../services/complex-form.service";
 
 
 @Component({
@@ -10,6 +11,7 @@ import {map, Observable, startWith, tap} from "rxjs";
 })
 export class ComplexFormComponent implements OnInit {
 
+  loading = false;
   mainForm!: FormGroup;
   personalInfoForm!: FormGroup;
   contactPreferenceCtrl!: FormControl;
@@ -24,8 +26,8 @@ export class ComplexFormComponent implements OnInit {
   showEmailCtrl$!: Observable<boolean>;
   showPhoneCtrl$!: Observable<boolean>;
 
-  constructor(private formBuilder: FormBuilder) {
-  }
+  constructor(private formBuilder: FormBuilder,
+              private complexFormService: ComplexFormService) {  }
 
   ngOnInit(): void {
     this.initFormControls();
@@ -66,7 +68,17 @@ export class ComplexFormComponent implements OnInit {
   }
 
   onSubmitForm() {
-    console.log(this.mainForm.value);
+    this.loading = true;
+    this.complexFormService.saveUserInfo(this.mainForm.value).pipe(
+      tap(saved => {
+        this.loading = false;
+        if (saved) {
+          this.resetForm();
+        } else {
+          console.error('Echec de l\'enregistrement');
+        }
+      })
+    ).subscribe();
   }
 
   private initFormObservables() {
@@ -117,4 +129,8 @@ export class ComplexFormComponent implements OnInit {
     }
   }
 
+  private resetForm() {
+    this.mainForm.reset();
+    this.contactPreferenceCtrl.patchValue('email');
+  }
 }
