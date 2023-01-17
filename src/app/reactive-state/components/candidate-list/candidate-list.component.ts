@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {Observable} from "rxjs";
+import {combineLatest, map, Observable, startWith} from "rxjs";
 import {CandidatesService} from "../../services/candidates.service";
 import {Candidate} from "../../models/candidate.model";
 import {FormBuilder, FormControl} from "@angular/forms";
@@ -25,7 +25,8 @@ export class CandidateListComponent implements OnInit {
 
   constructor(private candidatesService: CandidatesService,
               private formBuilder: FormBuilder
-              ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     this.initForm();
@@ -37,15 +38,29 @@ export class CandidateListComponent implements OnInit {
     this.searchCtrl = this.formBuilder.control('');
     this.searchTypeCtrl = this.formBuilder.control(CandidateSearchType.LASTNAME);
     this.searchTypeOptions = [
-      {value: CandidateSearchType.LASTNAME, label:'Nom'},
-      {value: CandidateSearchType.FIRSTNAME, label:'Prénom'},
-      {value: CandidateSearchType.COMPANY, label:'Entreprise'}
+      {value: CandidateSearchType.LASTNAME, label: 'Nom'},
+      {value: CandidateSearchType.FIRSTNAME, label: 'Prénom'},
+      {value: CandidateSearchType.COMPANY, label: 'Entreprise'}
     ]
   }
 
   private initObservables() {
     this.loading$ = this.candidatesService.loading$;
-    this.candidates$ = this.candidatesService.candidates$;
+    const search$ = this.searchCtrl.valueChanges.pipe(
+      startWith(this.searchCtrl.value),
+      map(value => value.toLowerCase())
+    );
+    const searchType$: Observable<CandidateSearchType> = this.searchTypeCtrl.valueChanges.pipe(
+      startWith(this.searchTypeCtrl.value)
+    );
+    this.candidates$ = combineLatest([
+      search$, searchType$, this.candidatesService.candidates$
+    ]).pipe(
+      map(([search, searchType, candidates]) => candidates.filter(candidates => candidates[searchType]
+        .toLowerCase()
+        .includes(search as string))
+      )
+    );
   }
 
 }
