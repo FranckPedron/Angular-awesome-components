@@ -24,11 +24,17 @@ export class CandidatesService {
     this._loading$.next(loading);
   }
 
+  private lastCandidatesLoad = 0;
+
   getCandidatesFromServer() {
+    if (Date.now() - this.lastCandidatesLoad <= 300000) {
+      return;
+    }
     this.setLoadingStatus(true);
     this.http.get<Candidate[]>(`${environment.apiUrl}/candidates`).pipe(
       delay(2000),
       tap(candidates => {
+        this.lastCandidatesLoad = Date.now();
         this._candidates$.next(candidates);
         this.setLoadingStatus(false);
       })
